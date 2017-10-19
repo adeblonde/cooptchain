@@ -1,0 +1,15 @@
+---
+- hosts: task_test_cooptchain_cooptchain_database
+  gather_facts: False
+
+  tasks:
+    - name: install mongodb
+    - command: sudo touch /etc/yum.repos.d/mongodb.repo 
+    - command: sudo echo "[mongodb]" >> /etc/yum.repos.d/mongodb.repo 
+    - command: sudo echo "name=MongoDB Repository" >> /etc/yum.repos.d/mongodb.repo 
+    - command: sudo echo "baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/" >> /etc/yum.repos.d/mongodb.repo 
+    - command: sudo echo "gpgcheck=0" >> /etc/yum.repos.d/mongodb.repo 
+    - command: sudo echo "enabled=1" >> /etc/yum.repos.d/mongodb.repo 
+    - command: sudo yum -y update
+    - command: sudo yum -y install mongodb-org mongodb-org-server
+    - command: sudo service mongod start

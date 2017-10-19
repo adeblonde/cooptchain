@@ -1,0 +1,8 @@
+---
+- hosts: task_test_cooptchain
+  gather_facts: False
+
+  tasks:
+    - name: host startup
+      command: sudo yum update -y
+    - command: sudo yum upgrade -y

@@ -1,0 +1,22 @@
+--datadir "/home/ethdata"   Data directory for the databases and keystore
+--networkid 787986          Our network ID (Decimal value of "NOV")              
+--identity "Noel"           Your Node name (for identification purpose)
+--port 30303                Default
+--rpc                       Allow communication with JSONRPC
+--rpcport "8000"            Communication port
+--rpccorsdomain "*"         Who can access through JSONRPC protcol to this node
+--ipcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3"                Available APIs
+--rpcapi "db,eth,net,web3"                                                      Available APIs
+--ws                        
+--bootnodes '',''           Nodes to comunicate with (specify enode url)
+--maxpeers 0                Number of Peers allowed to connect simultaneously to this node
+--nodiscover                Do not look for nodes
+--autodag                   Pregenerate DAG
+--extradata "NOV"           Piece of data to add to mined block
+--fakepow                   
+--nat "any" 
+--netrestrict               restrict to certain network
+
+console                     display js console
+js                          load js file
+attach                      attach to existing client

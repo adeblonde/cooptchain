@@ -1,0 +1,42 @@
+---
+- hosts: task_test_cooptchain_cooptchain_admin
+  gather_facts: False
+
+  tasks:
+    - name: install web3js
+      command: sudo yum update
+    - command: sudo curl --silent --location https://rpm.nodesource.com/setup_7.x >> install_npm.sh
+    - command: sudo ./install_npm.sh
+    - command: sudo yum -y install nodejs
+    - command: sudo yum install git
+    - command: npm install web3
+    
+    - name: install tomcat
+      command: sudo yum install java-1.7.0-openjdk-devel -y
+    - command: sudo groupadd tomcat
+    - command: sudo useradd -M -s /bin/nologin -g tomcat -d /opt/tomcat tomcat
+    - command: wget http://apache.crihan.fr/dist/tomcat/tomcat-8/v8.5.11/bin/apache-tomcat-8.5.11.tar.gz
+    - command: sudo mkdir /opt/tomcat
+    - command: sudo tar xvf apache-tomcat-8.5.11.tar.gz -C /opt/tomcat --strip-components=1
+    - command: sudo chgrp -R tomcat /opt/tomcat
+    - command: sudo chmod -R g+r /opt/tomcat/conf
+    - command: sudo chmod g+x /opt/tomcat/conf
+    - command: sudo chown -R tomcat webapps/ work/ temp/ logs/
+      args:
+        chdir: /opt/tomcat
+    - command: sudo chmod 700 /opt/tomcat
+    - command: sudo ln -s /opt/tomcat/bin/startup.sh /usr/bin/tomcatup
+    - command: sudo ln -s /opt/tomcat/bin/shutdown.sh /usr/bin/tomcatdown
+    - command: sudo /usr/bin/tomcatup
+    
+    - name: install and start nginx
+      command: sudo yum -y install nginx
+    - command: sudo mkdir -p /var/www/cooptchain
+    - command: sudo cp -R /home/ec2-user/cooptchain-front /var/www/cooptchain/
+    - command: sudo mkdir -p /var/www/cooptchain/logs
+    - command: sudo cp /home/ec2-user/nginx.conf /etc/nginx/nginx.conf
+    - command: sudo chown -R root:root /var/www/cooptchain
+    - command: sudo chmod 755 -R /var/www/cooptchain
+    - command: sudo service nginx start
+    
+    - command: npm run build

@@ -1,0 +1,24 @@
+---
+- hosts: task_test_cooptchain_cooptchain_miner
+  tasks:
+    - command: echo "$PATH"
+      register: default_path
+      
+- hosts: task_test_cooptchain_cooptchain_miner  
+  environment:
+    #PATH: "/home/ec2-user/go/bin:/usr/local/go/bin:{{ default_path.stdout }}"
+    #GOPATH: /home/ec2-user/go
+
+  tasks:
+    - name: install Geth
+      command: git clone https://github.com/ethereum/go-ethereum
+    - command: cd go-ethereum
+    - command: sudo yum -y install git make automake gcc gcc-c++ kernel-devel golang
+    - command: make geth
+      args:
+        chdir: /home/ec2-user/go-ethereum
+     
+    #- name : create first genesis block
+      #command : bash ~/create_genesis_block.sh PASSWORD
+    #- name : setup miner environment
+      #command : bash ~/CooptChain/create_miner.sh PASSWORD

@@ -1,0 +1,32 @@
+---
+- hosts: task_test_cooptchain
+  gather_facts: False
+
+  tasks:
+    - name: install python+docker+aws CLI
+      shell: sudo yum install python27-pip -y
+    - shell: curl -O https://bootstrap.pypa.io/get-pip.py
+    - shell: sudo python get-pip.py
+    - shell: sudo /usr/local/bin/pip install 'docker-py>=1.7.0'
+    - shell: sudo /usr/local/bin/pip install 'docker-compose>=1.7.0'
+    - shell: sudo yum install -y ecs-init
+    - shell: sudo service docker start
+    - shell: sudo start ecs || echo "Already started"
+    - shell: curl -O https://bootstrap.pypa.io/get-pip.py
+    - shell: sudo python get-pip.py
+    - shell: sudo /usr/local/bin/pip install awscli
+    
+    - name: connect to AWS docker repository
+      shell: mkdir -p ~/.aws/config
+      shell: mkdir -p ~/.aws/credentials
+      shell: cp ~/aws_config ~/.aws/config
+      shell: cp ~/aws_credentials ~/.aws/credentials
+      
+    - name: log into EC2 Docker repo
+      shell: aws ecr get-login | sudo sh
+      
+    - name: pull docker image
+      command: sudo docker pull DOCKER_REPO:DOCKER_IMAGE
+
+    - name : launch Eth docker
+      command : docker run -it --rm -v ${PWD}:/CooptChain -h 'miner_1' ethereum /bin/bash -c "bash /CooptChain/create_genesis_block.sh PASSWORD; bash /CooptChain/create_miner.sh PASSWORD;"
